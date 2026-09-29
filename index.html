@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BATCAVE // Garage</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene"></canvas>
+
+      <div id="hud">
+        <div id="hud-title">
+          <span class="bat-mark">&#9748;</span>
+          <div>
+            <h1>THE BATCAVE</h1>
+            <p>private garage</p>
+          </div>
+        </div>
+
+        <div id="hud-hint">
+          <p><strong>drag</strong> to orbit &middot; <strong>scroll</strong> to zoom &middot; <strong>space</strong> to pause turntables</p>
+        </div>
+
+        <div id="hud-spacer"></div>
+      </div>
+
+      <div class="plate" id="plate-car">
+        <span class="plate-name">BMW 2 SERIES COUPE</span>
+        <span class="plate-sub">2016 &middot; Jet Black</span>
+      </div>
+      <div class="plate" id="plate-bike">
+        <span class="plate-name">KAWASAKI NINJA ZX-6R</span>
+        <span class="plate-sub">2006 &middot; 636</span>
+      </div>
+
+      <div id="loading">
+        <p>entering the cave&hellip;</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
