@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createCave } from './scene/cave.js';
 import { createTurntable } from './scene/turntable.js';
-import { createCar } from './vehicles/car.js';
-import { createMotorcycle } from './vehicles/motorcycle.js';
+import { loadCar } from './vehicles/car.js';
+import { loadMotorcycle } from './vehicles/motorcycle.js';
+import { createStudioEnvironment } from './vehicles/gltfLoader.js';
 
 const canvas = document.getElementById('scene');
 const loadingEl = document.getElementById('loading');
@@ -39,6 +40,8 @@ controls.autoRotate = true;
 controls.autoRotateSpeed = 0.35;
 controls.update();
 
+const envMap = createStudioEnvironment(renderer);
+
 const cave = createCave(scene);
 
 const carTurntable = createTurntable({
@@ -48,7 +51,6 @@ const carTurntable = createTurntable({
   revolutionSeconds: 30,
 });
 scene.add(carTurntable.group);
-carTurntable.vehicleMount.add(createCar());
 
 const bikeTurntable = createTurntable({
   position: new THREE.Vector3(3.0, 0, 0),
@@ -57,7 +59,13 @@ const bikeTurntable = createTurntable({
   revolutionSeconds: 22,
 });
 scene.add(bikeTurntable.group);
-bikeTurntable.vehicleMount.add(createMotorcycle());
+
+Promise.all([
+  loadCar(envMap).then((car) => carTurntable.vehicleMount.add(car)),
+  loadMotorcycle(envMap).then((bike) => bikeTurntable.vehicleMount.add(bike)),
+])
+  .catch((error) => console.error('Failed to load a vehicle model', error))
+  .finally(() => loadingEl.classList.add('hidden'));
 
 const carLabelAnchor = new THREE.Vector3(carTurntable.group.position.x, 2.15, carTurntable.group.position.z);
 const bikeLabelAnchor = new THREE.Vector3(bikeTurntable.group.position.x, 1.65, bikeTurntable.group.position.z);
@@ -119,5 +127,3 @@ function animate() {
 }
 
 animate();
-
-setTimeout(() => loadingEl.classList.add('hidden'), 550);
